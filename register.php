@@ -1,5 +1,22 @@
-<?php include('server.php') ?>
+<?php
+// Include database connection file
+include_once('config.php');
+if (isset($_POST['submit'])) {
 
+    $username = $con->real_escape_string($_POST['username']);
+    $password = $con->real_escape_string(md5($_POST['password']));
+    $name     = $con->real_escape_string($_POST['name']);
+    $role     = $con->real_escape_string($_POST['role']);
+    $query  = "INSERT INTO admins (name,username,password,role) VALUES ('$name','$username','$password','$role')";
+    $result = $con->query($query);
+    if ($result==true) {
+        header("Location:login.php");
+        die();
+    }else{
+        $errorMsg  = "You are not Registred..Please Try again";
+    }
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,47 +30,119 @@
 <body>
 <div class="container d-flex justify-content-center">
     <div class="row col-8">
-        <form action="register.php" method="POST">
+        <form action="" method="POST">
             <div class="form-group">
-                <label for="exampleInputEmail1">Username</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username" >
-                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" placeholder="Enter Name" required="">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" placeholder="Enter Username" required="">
             </div>
-            <!--<div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>-->
-            <button type="reset" id="submitButton" class="btn btn-primary col-2 mt-2 ms-2 submit-button">Register</button>
-            <script type="text/javascript">
-                document.getElementById("submitButton").onclick = function () {
-                    location.href = "login.php";
-                };
-            </script>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter Password" required="">
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select class="form-control" name="role" required="">
+                    <option value="">Select Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="pollingOfficer">Polling Officer</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <p>Already have account?<a href="login.php" class="ps-2">Login</a></p>
+                <input type="submit" name="submit" class="btn btn-primary">
+            </div>
         </form>
     </div>
-
-    <!--<div class="col-sm-12 text-center">
-        <h1>Login</h1>
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-8 text-center">
-        <h2>Username</h2>
-        <button type="button" class="btn btn-primary">Sign Up</button>
-    </div>
-</div>-->
 </div>
 
 <!-- https://webscodex.medium.com/creating-multi-user-role-based-admin-using-php-mysql-and-bootstrap-dbebf2740411 -->
 </body>
 
-
 <footer>
     <script src="js/bootstrap.bundle.min.js"></script>
 </footer>
 </html>
+
+
+<!--
+<?php
+/*// Include database connection file
+include_once('config.php');
+if (isset($_POST['submit'])) {
+
+    $username = $con->real_escape_string($_POST['username']);
+    $password = $con->real_escape_string(md5($_POST['password']));
+    $name     = $con->real_escape_string($_POST['name']);
+    $role     = $con->real_escape_string($_POST['role']);
+    $query  = "INSERT INTO admins (name,username,password,role) VALUES ('$name','$username','$password','$role')";
+    $result = $con->query($query);
+    if ($result==true) {
+        header("Location:login.php");
+        die();
+    }else{
+        $errorMsg  = "You are not Registred..Please Try again";
+    }
+}
+*/?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Multi user role based application login in php mysqli</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="card text-center" style="padding:20px;">
+  <h3>Multi user role based application login in php mysqli</h3>
+</div><br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <?php if (isset($errorMsg)) { ?>
+          <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <?php echo $errorMsg; ?>
+          </div>
+        <?php } ?>
+        <form action="" method="POST">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" name="name" placeholder="Enter Name" required="">
+          </div>
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter Username" required="">
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" name="password" placeholder="Enter Password" required="">
+          </div>
+          <div class="form-group">
+            <label for="role">Role:</label>
+            <select class="form-control" name="role" required="">
+              <option value="">Select Role</option>
+              <option value="super_admin">Super admin</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p>Already have account ?<a href="login.php"> Login</a></p>
+            <input type="submit" name="submit" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+</body>
+</html>
+
+-->
