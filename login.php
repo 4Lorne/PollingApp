@@ -18,7 +18,6 @@ if (isset($_POST['submit'])) {
     $errorMsg = "";
     $username = $con->real_escape_string($_POST['username']);
     $password = $con->real_escape_string(md5($_POST['password']));
-
     if (!empty($username) || !empty($password)) {
         $query = "SELECT * FROM admins WHERE username = '$username'";
         $result = $con->query($query);
@@ -26,6 +25,7 @@ if (isset($_POST['submit'])) {
             $row = $result->fetch_assoc();
             $_SESSION['ID'] = $row['id'];
             $_SESSION['ROLE'] = $row['role'];
+            $_SESSION['USERNAME'] = $row['username'];
             $_SESSION['NAME'] = $row['name'];
             //Depending on the route, the user will be routed to the appropriate page
             if ($_SESSION['ROLE'] == 'user'){
