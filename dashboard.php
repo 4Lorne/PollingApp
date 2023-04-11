@@ -58,37 +58,14 @@ if (!isset($_SESSION['ID'])) {
                         </li>
                     <?php } ?>
                     <?php if ($_SESSION['ROLE'] == 'admin') { ?>
-                        <h6>Catalog</h6>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="create.php">
                                 <span data-feather="users"></span>
-                                Products
+                                Create a Poll
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="create.php">
                                 <span data-feather="users"></span>
-                                Category
-                            </a>
-                        </li>
-                        <h6>Order & Shipping</h6>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span data-feather="users"></span>
-                                Shipping
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span data-feather="users"></span>
-                                Customers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span data-feather="users"></span>
-                                Order
+                                Manage Users
                             </a>
                         </li>
                     <?php } ?>
