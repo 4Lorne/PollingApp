@@ -1,3 +1,4 @@
+<!-- Connect to the database using the credentials -->
 <?php
 // Database configuration
 $hostname = "localhost";

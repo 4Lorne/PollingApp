@@ -1,4 +1,46 @@
+<!--
+Code is heavily inspired by the website below and refactored to fit the assignment requirements
+https://webscodex.medium.com/creating-multi-user-role-based-admin-using-php-mysql-and-bootstrap-dbebf2740411
+-->
+
+
 <?php
+session_start();
+if (isset($_SESSION['ID'])) {
+    header("Location:dashboard.php");
+    exit();
+}
+// Include database connectivity
+
+include_once('config.php');
+
+if (isset($_POST['submit'])) {
+    $errorMsg = "";
+    $username = $con->real_escape_string($_POST['username']);
+    $password = $con->real_escape_string(md5($_POST['password']));
+
+    if (!empty($username) || !empty($password)) {
+        $query = "SELECT * FROM admins WHERE username = '$username'";
+        $result = $con->query($query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $_SESSION['ID'] = $row['id'];
+            $_SESSION['ROLE'] = $row['role'];
+            $_SESSION['NAME'] = $row['name'];
+            //Depending on the route, the user will be routed to the appropriate page
+            if ($_SESSION['ROLE'] == 'user'){
+                header("Location:vote.php");
+            } else {
+                header("Location:dashboard.php");
+            }
+            die();
+        } else {
+            $errorMsg = "No user found on this username";
+        }
+    } else {
+        $errorMsg = "Username and Password is required";
+    }
+}
 ?>
 
 <!doctype html>
@@ -9,53 +51,35 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Login</title>
 </head>
 <body>
 <div class="container d-flex justify-content-center">
     <div class="row col-8">
-        <form action="login.php" method="POST">
+        <form action="" method="POST" class="pt-4">
+            <?php if (isset($errorMsg)) { ?>
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <?php echo $errorMsg; ?>
+                </div>
+            <?php } ?>
             <div class="form-group">
-                <label for="exampleInputEmail1">Username</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
-                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" placeholder="Enter Username">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter Password">
             </div>
-            <!--<div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>-->
-            <button type="submit" class="btn btn-primary col-2 mt-2 ms-2">Login</button>
-            <button type="reset" id="signupButton" class="btn btn-primary col-2 mt-2 ms-2" href="register.php" role="button">Sign Up</button>
-            <script type="text/javascript">
-                document.getElementById("signupButton").onclick = function () {
-                    location.href = "register.php";
-                };
-            </script>
-
+            <div class="form-group">
+                <p>Not registered yet ?<a href="register.php"> Register here</a></p>
+                <input type="submit" name="submit" class="btn btn-success" value="Login">
+            </div>
         </form>
     </div>
-    
-        <!--<div class="col-sm-12 text-center">
-            <h1>Login</h1>
-            
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-8 text-center">
-            <h2>Username</h2>
-            <button type="button" class="btn btn-primary">Sign Up</button>
-        </div>
-    </div>-->
 </div>
-
-<!-- https://webscodex.medium.com/creating-multi-user-role-based-admin-using-php-mysql-and-bootstrap-dbebf2740411 -->
 </body>
-
-
 <footer>
     <script src="js/bootstrap.bundle.min.js"></script>
 </footer>
