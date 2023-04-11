@@ -3,6 +3,11 @@ Code is heavily inspired by the website below and refactored to fit the assignme
 https://webscodex.medium.com/creating-multi-user-role-based-admin-using-php-mysql-and-bootstrap-dbebf2740411
 -->
 
+<!--
+TODO: Polling officer declare result
+      View voting records
+      Set user votes to 0 when new poll is created
+-->
 
 <?php
 session_start();
@@ -28,11 +33,8 @@ if (isset($_POST['submit'])) {
             $_SESSION['USERNAME'] = $row['username'];
             $_SESSION['NAME'] = $row['name'];
             //Depending on the route, the user will be routed to the appropriate page
-            if ($_SESSION['ROLE'] == 'user'){
-                header("Location:vote.php");
-            } else {
-                header("Location:dashboard.php");
-            }
+            header("Location:dashboard.php");
+
             die();
         } else {
             $errorMsg = "No user found on this username";

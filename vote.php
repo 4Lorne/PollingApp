@@ -3,31 +3,23 @@
 include_once('config.php');
 session_start();
 
-// Initialize session variables with default values if not set
-if (!isset($_SESSION['USERNAME'])) {
-    $_SESSION['USERNAME'] = '';
-}
-if (!isset($_SESSION['ID'])) {
-    $_SESSION['ID'] = '';
-}
-if (!isset($_SESSION['ROLE'])) {
-    $_SESSION['ROLE'] = '';
-}
 if (!isset($_SESSION['total_votes'])) {
     $_SESSION['total_votes'] = 0;
 }
-if (!isset($_SESSION['yes_click'])) {
-    $_SESSION['yes_click'] = 0;
-}
-if (!isset($_SESSION['no_click'])) {
-    $_SESSION['no_click'] = 0;
+// Retrieve the poll question from the database
+$query = "SELECT question FROM polls LIMIT 1";
+$result = $con->query($query);
+$question = '';
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $question = $row['question'];
 }
 
 if (isset($_POST['submit'])) {
     $username = $con->real_escape_string($_SESSION['USERNAME']);
     $num_votes = $con->real_escape_string($_SESSION['total_votes']);
 
-// Check if username already exists in the database
+    // Check if username already exists in the database
     $query = "SELECT * FROM poll_results WHERE username = '$username'";
     $result = $con->query($query);
 
@@ -49,7 +41,7 @@ if (isset($_POST['submit'])) {
         $errorMsg = "An error occurred while updating the poll results.";
     }
 }
-    ?>
+?>
 
 <?php
 $max_votes = 5; // maximum number of total votes allowed
@@ -82,43 +74,52 @@ $total_votes = $_SESSION['total_votes'];
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Register</title>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-<div class="container">
-    <form action="" method="post">
-        <div class="row justify-content-center my-3">
-            <div class="col-auto">
-                <button type="submit" class="btn btn-success" name="yes_vote">Yes</button>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="row">
+        <div class="col">
+            <form action="" method="post">
+                <div class="col-12">
+                    <p><?php echo $question?></p>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <button type="submit" class="btn btn-success" name="yes_vote">Yes</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <button type="submit" class="btn btn-danger" name="no_vote">No</button>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col-12">
+                    <p>Yes</p>
+                    <span class='badge bg-success'><?php echo $_SESSION['yes_click']; ?></span>
+                </div>
+                <div class="col-12">
+                    <p>No</p>
+                    <span class='badge bg-success'><?php echo $_SESSION['no_click']; ?></span>
+                </div>
+                <div class="col-12">
+                    <p>Total Votes <?php echo $_SESSION['total_votes']; ?>/<?php echo 5; ?></p>
+                    <span class='badge bg-success'><?php echo $_SESSION['total_votes']; ?></span>
+                </div>
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-danger" name="no_vote">No</button>
-            </div>
-        </div>
-        <div class="row justify-content-center my-3">
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-            </div>
-        </div>
-    </form>
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <p>Yes</p>
-            <span class='badge bg-success'><?php echo $_SESSION['yes_click']; ?></span>
-        </div>
-        <div class="col-auto">
-            <p>No</p>
-            <span class='badge bg-success'><?php echo $_SESSION['no_click']; ?></span>
-        </div>
-        <div class="col-auto">
-            <p>Total Votes <?php echo $_SESSION['total_votes']; ?>/<?php echo 5; ?></p>
-            <span class='badge bg-success'><?php echo $_SESSION['total_votes']; ?>
         </div>
     </div>
-
-
 </div>
-</body>
 <script src="js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -18,7 +18,7 @@ if (!isset($_SESSION['ID'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Multi user role based application login in php mysqli</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -43,30 +43,17 @@ if (!isset($_SESSION['ID'])) {
                     </li>
                     <?php if($_SESSION['ROLE'] == 'user'){ ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="vote.php">
                                 <span data-feather="thumbs-up"></span>
                                 Vote
                             </a>
                         </li>
                     <?php } ?>
                     <?php if($_SESSION['ROLE'] == 'pollingOfficer'){ ?>
-                        <h6>Sale & Purchase</h6>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="create.php">
                                 <span data-feather="users"></span>
-                                Payment
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span data-feather="users"></span>
-                                Sales
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span data-feather="users"></span>
-                                Purchases
+                                Create a Poll
                             </a>
                         </li>
                     <?php } ?>
