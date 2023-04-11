@@ -7,12 +7,6 @@ if (!isset($_SESSION['ID'])) {
     exit();
 }
 ?>
-<style type="text/css">
-    .nav-link{
-        color: #f9f6f6;
-        font-size: 14px;
-    }
-</style>
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,8 +16,7 @@ if (!isset($_SESSION['ID'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<nav class="navbar navbar-info sticky-top bg-info flex-md-nowrap p-10">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="" style="color: #5b5757;"><b>Webs Codex</b></a>
+<nav class="navbar navbar-info sticky-top flex-md-nowrap p-10">
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
             <a class="nav-link" href="logout.php">Hi, <?php echo ucwords($_SESSION['NAME']); ?> Log out</a>
@@ -32,9 +25,9 @@ if (!isset($_SESSION['ID'])) {
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-info sidebar" style="height: 569px">
+        <nav class="col-md-2 d-none d-md-block sidebar">
             <div class="sidebar-sticky">
-                <ul class="nav flex-column" style="color: #5b5757;">
+                <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="">
                             <span data-feather="home"></span>
@@ -63,10 +56,6 @@ if (!isset($_SESSION['ID'])) {
                                 <span data-feather="users"></span>
                                 Create a Poll
                             </a>
-                            <a class="nav-link" href="create.php">
-                                <span data-feather="users"></span>
-                                Manage Users
-                            </a>
                         </li>
                     <?php } ?>
                 </ul>
@@ -89,27 +78,23 @@ if (!isset($_SESSION['ID'])) {
                     </thead>
                     <tbody>
                     <?php
-                    if ($_SESSION['ROLE'] == "super_admin") {
+                    if ($_SESSION['ROLE'] == "admin") {
                         $query = "SELECT * FROM admins";
-                    }else{
-                        $role = $_SESSION['ROLE'];
-                        $query = "SELECT * FROM admins WHERE role = '$role'";
+                        $result = $con->query($query);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_array()) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $row['id']?></td>
+                                    <td><?php echo $row['name']?></td>
+                                    <td><?php echo $row['username']?></td>
+                                    <td><?php echo $row['role']?></td>
+                                    <td><?php echo date('d-M-Y', strtotime($row['created']))?></td>
+                                </tr>
+                            <?php	}
+                        }
                     }
-                    $result = $con->query($query);
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_array()) {
-                            ?>
-                            <tr>
-                                <td><?php echo $row['id']?></td>
-                                <td><?php echo $row['name']?></td>
-                                <td><?php echo $row['username']?></td>
-                                <td><?php echo $row['role']?></td>
-                                <td><?php echo date('d-M-Y', strtotime($row['created']))?></td>
-                            </tr>
-                        <?php	}
-                    }else{
-                        echo "<h2>No record found!</h2>";
-                    } ?>
+                    ?>
                     </tbody>
                 </table>
             </div>
