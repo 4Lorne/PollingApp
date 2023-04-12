@@ -3,11 +3,6 @@ Code is heavily inspired by the website below and refactored to fit the assignme
 https://webscodex.medium.com/creating-multi-user-role-based-admin-using-php-mysql-and-bootstrap-dbebf2740411
 -->
 
-<!--
-TODO: Polling officer declare result
-      View voting records
-      Set user votes to 0 when new poll is created
--->
 
 <?php
 session_start();
